@@ -5,6 +5,7 @@
 #define GVSU_CS263_SINGLE_LINKED_LIST
 
 #include <iostream>
+
 using namespace std;
 
 /* The following single_linked_list class shall be implemented WITHOUT
@@ -15,7 +16,7 @@ using namespace std;
  * functions to manipulate a recursive data structure.
  */
 
-template <typename E>
+template<typename E>
 class single_linked_list {
 private:
     /* a struct is a class whose members are all public */
@@ -44,26 +45,27 @@ public:
         return _size(head);
     }
 
-    void print (ostream& destination) const {
+    void print(ostream &destination) const {
         /* start printing recursively from the head pointer */
         /* TODO: add a line that calls the recursive function */
+        _print(head, destination);
     }
 
-    bool is_contained (const E& x) const {
-        return _is_contained (head, x);
+    bool is_contained(const E &x) const {
+        return _is_contained(head, x);
     }
 
-    void addItem (const E& x) {
+    void addItem(const E &x) {
         /* TODO: complete this method by calling your recursive PRIVATE function
          */
     }
 
-    void remove (const E& x) {
+    void remove(const E &x) {
         /* TODO: complete this method by calling your recursive PRIVATE function
          */
     }
 
-    void print_reverse (ostream& destination) {
+    void print_reverse(ostream &destination) {
         /* TODO: Question 3.29 complete this method by using a NON-RECURSIVE
          * technique
          */
@@ -71,7 +73,7 @@ public:
 
 private:
     /* the following private functions are RECURSIVE */
-    unsigned long _size (Node *from) const {
+    unsigned long _size(Node *from) const {
         if (from != nullptr) {
             int size_after_me = _size(from->next);
             return 1 + size_after_me;
@@ -80,16 +82,46 @@ private:
             return 0;
     }
 
-    void _print (Node *from, ostream& out) const {
+    void _print(Node *from, ostream &out) const {
         if (from != nullptr) {
             out << from->data << " ";
-            _print (from->next, out);
+            _print(from->next, out);
         }
     }
 
-    bool _is_contained (Node *from, const E& val) const {
+    bool _is_contained(Node *from, const E &val) const {
         /* TODO Complete the code here */
+        if (from->next != nullptr) {
+            if (from->data == val) {
+                return true;
+            }
+            else {
+                _is_contained(from->next, val);
+            }
+        }
         return false;
+    }
+
+    void _addItem(Node *from, const E &newVal) {
+        if(from->next == nullptr) {
+            from->next->data = newVal;
+            return;
+        }
+        _addItem(head->next, newVal);
+    }
+
+    void _deconstructor (Node *from) {
+        if(from->next == nullptr)
+
+        Node temp = from;
+
+        if(head == nullptr) {
+            return;
+        }
+        else {
+            _deconstructor(head->next);
+            delete(head);
+        }
     }
 
     /* TODO Add more private recursive functions here */
