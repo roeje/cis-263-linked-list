@@ -39,6 +39,7 @@ public:
         /* call a RECURSIVE private function for removing
          * all the nodes
          */
+        _destructor(head);
     }
 
     unsigned long size() const {
@@ -58,11 +59,13 @@ public:
     void addItem(const E &x) {
         /* TODO: complete this method by calling your recursive PRIVATE function
          */
+        _addItem(head, x);
     }
 
     void remove(const E &x) {
         /* TODO: complete this method by calling your recursive PRIVATE function
          */
+        _remove(head, x);
     }
 
     void print_reverse(ostream &destination) {
@@ -90,8 +93,7 @@ private:
     }
 
     bool _is_contained(Node *from, const E &val) const {
-        /* TODO Complete the code here */
-        if (from->next != nullptr) {
+        if (from != nullptr) {
             if (from->data == val) {
                 return true;
             }
@@ -103,25 +105,66 @@ private:
     }
 
     void _addItem(Node *from, const E &newVal) {
-        if(from->next == nullptr) {
-            from->next->data = newVal;
-            return;
-        }
-        _addItem(head->next, newVal);
-    }
 
-    void _deconstructor (Node *from) {
-        if(from->next == nullptr)
+        Node *temp = new Node();
+        temp->data = newVal;
 
-        Node temp = from;
-
-        if(head == nullptr) {
-            return;
+        Node *&temp2 = head;
+        if (temp2 != nullptr) {
+            if (temp2->next == nullptr) {
+                temp2->next = temp;
+                return;
+            }
+            _addItem(temp2->next, newVal);
         }
         else {
-            _deconstructor(head->next);
-            delete(head);
+            temp2 = temp;
+            return;
         }
+
+
+//        Node *temp = new Node();
+//        temp->data = newVal;
+//        if(from->next == nullptr) {
+//            from = temp;
+//            return;
+//        }
+////        if(from->next == nullptr) {
+////            from->next = temp;
+////            return;
+////        }
+//        _addItem(from->next, newVal);
+//        delete temp;
+    }
+
+    void _remove(Node *from, const E &val) {
+        if (from == nullptr) {
+            return;
+        }
+//        if(from->next == nullptr){
+//            return;
+//        }
+        if (from->next->data == val) {
+            Node *temp = head->next->next;
+            cout << from->next->data << endl;
+            delete from->next;
+            from->next = temp;
+            return;
+        }
+        _remove(head->next, val);
+
+    }
+
+    void _destructor(Node *from) {
+//        Node *temp = from;
+//        if (head == nullptr) {
+//            return;
+//        }
+//        else {
+//            from = from->next;
+//            _destructor(from);
+//            delete temp;
+//        }
     }
 
     /* TODO Add more private recursive functions here */
