@@ -56,6 +56,7 @@ TEST_CASE ("Linked list of string") {
             REQUIRE_FALSE (names.is_contained("X" + p));
         }
         for (auto p : planets) {
+            cout << p << endl;
             names.remove(p);
             REQUIRE_FALSE (names.is_contained(p));
         }

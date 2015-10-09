@@ -72,6 +72,20 @@ public:
         /* TODO: Question 3.29 complete this method by using a NON-RECURSIVE
          * technique
          */
+        for(int i = _size(head); i > 0; i--) {
+            int j = 1;
+            Node *temp = head;
+            while(j < i) {
+                if (temp->next == nullptr) {
+                    break;
+                }
+                else {
+                    temp = temp->next;
+                }
+                j++;
+            }
+            destination << temp->data << " ";
+        }
     }
 
 private:
@@ -106,21 +120,40 @@ private:
 
     void _addItem(Node *from, const E &newVal) {
 
-        Node *temp = new Node();
-        temp->data = newVal;
-
-        Node *&temp2 = head;
-        if (temp2 != nullptr) {
-            if (temp2->next == nullptr) {
-                temp2->next = temp;
-                return;
-            }
-            _addItem(temp2->next, newVal);
-        }
-        else {
-            temp2 = temp;
+        if (head == NULL) {
+            head = new Node;
+            head->data = newVal;
+            head->next = NULL;
             return;
         }
+        else {
+            if (from->next != NULL) {
+                _addItem(from->next, newVal);
+            }
+            else {
+                from->next = new Node;
+                from->next->data = newVal;
+                from->next->next = NULL;
+            }
+        }
+
+
+//        Node *temp = new Node();
+//        temp->data = newVal;
+//        temp->next = NULL;
+//
+//        Node *&temp2 = head;
+//        if (temp2 != nullptr) {
+//            if (temp2->next == nullptr) {
+//                temp2->next = temp;
+//                return;
+//            }
+//            _addItem(temp2->next, newVal);
+//        }
+//        else {
+//            temp2 = temp;
+//            return;
+//        }
 
 
 //        Node *temp = new Node();
@@ -137,37 +170,64 @@ private:
 //        delete temp;
     }
 
-    void _remove(Node *from, const E &val) {
+    void _remove(Node* &from, const E& val) {
+        if (from == NULL) {
+            return;
+        }
+
+        //head case
+        if (from->data == val && from == head) {
+            Node *temp = from;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        //middle case
+        if (from->next && from->next->data == val) {
+            Node *temp = from->next;
+            from->next = temp->next;
+
+            delete temp;
+            return;
+        }
+        _remove(from->next, val);
+    }
+
+    void _destructor(Node *&from) {
         if (from == nullptr) {
             return;
         }
-//        if(from->next == nullptr){
-//            return;
-//        }
-        if (from->next->data == val) {
-            Node *temp = head->next->next;
-            cout << from->next->data << endl;
-            delete from->next;
-            from->next = temp;
-            return;
-        }
-        _remove(head->next, val);
-
-    }
-
-    void _destructor(Node *from) {
-//        Node *temp = from;
-//        if (head == nullptr) {
-//            return;
-//        }
-//        else {
-//            from = from->next;
-//            _destructor(from);
-//            delete temp;
-//        }
+        Node *temp = from;
+        from = from->next;
+        delete temp;
+        _destructor(from);
     }
 
     /* TODO Add more private recursive functions here */
+
+    void main() {
+        single_linked_list<string> names;
+        vector<string> planets{"Mars", "Venus", "Uranus", "Saturn",
+                               "Jupiter", "Earth"};
+
+        for (auto p : planets) {
+            names.addItem(p);
+        }
+
+        REQUIRE (names.size() == planets.size());
+        for (auto p : planets) {
+            REQUIRE (names.is_contained(p));
+            REQUIRE_FALSE (names.is_contained("X" + p));
+        }
+
+        for (auto p : planets) {
+            cout << p << endl;
+            names.remove(p);
+            REQUIRE_FALSE (names.is_contained(p));
+        }
+
+    }
 
 };
 
