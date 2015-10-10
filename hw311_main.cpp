@@ -49,14 +49,12 @@ TEST_CASE ("Linked list of string") {
         for (auto p : planets) {
             names.addItem(p);
         }
-
         REQUIRE (names.size() == planets.size());
         for (auto p : planets) {
             REQUIRE (names.is_contained(p));
             REQUIRE_FALSE (names.is_contained("X" + p));
         }
         for (auto p : planets) {
-            cout << p << endl;
             names.remove(p);
             REQUIRE_FALSE (names.is_contained(p));
         }
